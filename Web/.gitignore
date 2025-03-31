@@ -1,0 +1,32 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+env/
+venv/
+
+# VS Code settings
+.vscode/
+
+# Mac junk
+.DS_Store
+
+# Windows junk
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment variables
+.env
+
+#data
+.txt
+.srt 
+.wav 
+.webm
+
+
+!.gitignore
+!Web/

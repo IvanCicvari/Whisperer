@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI IS MY SLAVE</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+  </head>
+  
+  <body class="d-flex flex-column min-vh-100">
+    <!-- Header -->
+<header class="fixed-top py-3">
+  <div class="container d-flex justify-content-between align-items-center">
+    <h5 class="mb-0 fw-bold text-primary">AI Whisper</h5>
+    <nav>
+      <a href="/" class="mx-2 text-dark">Home</a>
+      <a href="https://github.com" target="_blank" class="mx-2 text-dark">GitHub</a>
+      <a href="#" class="mx-2 text-dark">About</a>
+    </nav>
+  </div>
+</header>
+<main class="flex-fill mt-5">
+
+<div class="card">
+  <h1>AI Transcriptor</h1>
+  <p class="lead">Upload your file and let AI turn it into text effortlessly and instantly.</p>
+
+  <form method="POST" action="{{ url_for('transcribe.transcribe') }}" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label for="file" class="form-label">Select your audio or video file</label>
+      <input type="file" name="file" id="file" class="form-control" required>
+    </div>
+    <div class="mb-3">
+      <label for="lang" class="form-label">Language</label>
+      <input type="text" name="lang" id="lang" class="form-control" value="hr">
+    </div>
+    <div class="mb-3">
+      <label for="model" class="form-label">Whisper Model</label>
+      <select name="model" id="model" class="form-select">
+        <option value="tiny" selected>tiny</option>
+        <option value="base" >base</option>
+        <option value="small">small</option>
+        <option value="medium">medium</option>
+        <option value="large-v3">large-v3</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary w-100 py-2">Transcribe It</button>
+  </form>
+
+  {% if transcript %}
+  <h4 class="mb-3">Transcript Preview</h4>
+  <pre>{{ transcript }}</pre>
+  <div class="d-flex gap-3 mt-3">
+    <a href="{{ url_for('static', filename='output/' ~ download_txt) }}" class="btn btn-primary">Download .txt</a>
+    <a href="{{ url_for('static', filename='output/' ~ download_srt) }}" class="btn btn-secondary">Download .srt</a>
+  </div>
+{% endif %}
+
+
+</div>
+</main>
+
+  <!-- Footer -->
+
+  <footer class="text-center py-3 text-muted bg-light">
+    &copy; 2025 Ivan Cicvaric · <a href="#">Privacy</a> · <a href="#">Terms</a>
+  </footer>
+
+
+</body>
+</html>

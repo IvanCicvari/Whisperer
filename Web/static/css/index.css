@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+    :root {
+      --primary: #6366f1;
+      --secondary: #f472b6;
+      --bg: #f3f4f6;
+      --text: #111827;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 750px;
+      background: white;
+      padding: 40px;
+      border-radius: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 1s ease-out;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .lead {
+      text-align: center;
+      color: #6b7280;
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+    }
+
+    label {
+      font-weight: 600;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background-color: #4f46e5;
+    }
+
+    .btn-secondary {
+      background-color: var(--secondary);
+      border: none;
+    }
+
+    .btn-secondary:hover {
+      background-color: #ec4899;
+    }
+
+    pre {
+      background: #f9fafb;
+      padding: 20px;
+      border-radius: 12px;
+      max-height: 300px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    .progress-bar {
+      transition: width 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
