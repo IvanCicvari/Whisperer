@@ -119,4 +119,37 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   });
-  
+// ========== UI interactions ==========
+const fileInput = document.getElementById("file");
+const fileNameText = document.getElementById("file-name-text");
+const checkIcon = document.getElementById("check-icon");
+const mediaPreview = document.getElementById("media-preview");
+const audioPlayer = document.getElementById("audio-player");
+
+fileInput.addEventListener("change", () => {
+  const file = fileInput.files[0];
+
+  if (file) {
+    // ✅ Show filename + check
+    fileNameText.textContent = `Selected file: ${file.name}`;
+    checkIcon.style.display = "inline";
+
+    // 🎧 Check type & preview
+    const fileURL = URL.createObjectURL(file);
+
+    if (file.type.startsWith("audio/") || file.type.startsWith("video/"))
+    {
+      audioPlayer.src = fileURL;
+      mediaPreview.style.display = "block";
+    } else {
+      audioPlayer.src = "";
+      mediaPreview.style.display = "none";
+    }
+  } else {
+    fileNameText.textContent = "";
+    checkIcon.style.display = "none";
+    audioPlayer.src = "";
+    mediaPreview.style.display = "none";
+  }
+});
+

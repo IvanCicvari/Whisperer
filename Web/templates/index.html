@@ -30,7 +30,17 @@
     <div class="mb-3">
       <label for="file" class="form-label">Select your audio or video file</label>
       <input type="file" name="file" id="file" class="form-control" required>
+      <small id="file-name" class="form-text text-muted">
+        <span id="file-name-text"></span>
+        <span id="check-icon" style="display: none;">✅</span>
+      </small>
     </div>
+    
+    <!-- 🎧 Media preview -->
+    <div class="mb-3" id="media-preview" style="display: none;">
+      <audio id="audio-player" controls style="width: 100%;"></audio>
+    </div>
+    
     <div class="mb-3">
       <label for="lang" class="form-label">Language</label>
       <input type="text" name="lang" id="lang" class="form-control" value="hr">
