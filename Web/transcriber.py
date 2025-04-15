@@ -1,7 +1,7 @@
 import subprocess
 import whisper
 import shutil
-from utils import write_srt
+from utils.srt_utils import write_srt
 from pathlib import Path
 from pydub import AudioSegment
 import uuid

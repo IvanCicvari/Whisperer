@@ -1,19 +1,19 @@
 from flask import Blueprint, request, jsonify, current_app
-from pathlib import Path
-import uuid
+from utils.transcribe_utils import prepare_file_paths, create_transcriber
+from progress import progress_store, job_results
 import threading
-from transcriber import Transcriber  # ✅ Ovo je točno
-from transcriber import Transcriber
-from flask import render_template
-
-transcribe_bp = Blueprint("transcribe", __name__)
-
-from flask import Blueprint, request, render_template, current_app, send_file
-from pathlib import Path
 import uuid
-from transcriber import Transcriber
 
 transcribe_bp = Blueprint("transcribe", __name__)
+
+def transcribe_job(app, job_id, input_path, output_txt, lang, model, update_progress):
+    print(f"🧵 Background job started for {job_id}")
+    with app.app_context(): 
+        transcriber = create_transcriber(input_path, output_txt, lang, model, update_progress)
+        transcript = transcriber.transcribe()
+        job_results[job_id]["transcript"] = transcript
+        print(f"✅ Job {job_id} complete and stored in job_results")
+
 
 @transcribe_bp.route("/transcribe", methods=["POST"])
 def transcribe():
@@ -22,40 +22,34 @@ def transcribe():
     model = request.form.get("model", "tiny")
 
     if not file:
-        return "No file uploaded", 400
+        return jsonify({"error": "No file uploaded"}), 400
 
-    upload_dir = Path(current_app.config["UPLOAD_FOLDER"])
-    output_dir = Path(current_app.config["OUTPUT_FOLDER"])
-    temp_dir = Path(current_app.config["TEMP_FOLDER"])
+    job_id = str(uuid.uuid4())
+    progress_store[job_id] = 0.0
 
-    upload_dir.mkdir(parents=True, exist_ok=True)
-    output_dir.mkdir(parents=True, exist_ok=True)
-    temp_dir.mkdir(parents=True, exist_ok=True)
+    def update_progress(p):
+        progress_store[job_id] = round(p, 2)
 
-    file_ext = Path(file.filename).suffix
-    input_path = upload_dir / f"input_{uuid.uuid4()}{file_ext}"
-    output_txt = output_dir / f"output_{uuid.uuid4()}.txt"
-    output_srt = output_txt.with_suffix(".srt")
-
+    input_path, output_txt, output_srt = prepare_file_paths(file)
     file.save(input_path)
 
-    transcriber = Transcriber(
-        video_path=input_path,
-        output_path=output_txt,
-        lang=lang,
-        model=model,
-        chunk=60,
-        keep_temp=False,
-        update_status=lambda msg: print(msg),
-        update_progress=lambda p: None,
-        temp_folder=temp_dir
-    )
+    job_results[job_id] = {
+        "input_path": input_path,
+        "output_txt": output_txt,
+        "output_srt": output_srt,
+        "lang": lang,
+        "model": model,
+        "transcript": None,
+    }
 
-    transcript = transcriber.transcribe()
+    # ✅ Get app from current_app
+    app_instance = current_app._get_current_object()
 
-    return render_template("index.html",
-        transcript=transcript,
-        download_txt=output_txt.name,
-        download_srt=output_srt.name
-    )
+    threading.Thread(
+        target=transcribe_job,
+        args=(app_instance, job_id, input_path, output_txt, lang, model, update_progress),
+        daemon=True
+    ).start()
 
+    print("✅ Returning job_id immediately:", job_id)
+    return jsonify({"job_id": job_id})

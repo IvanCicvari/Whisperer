@@ -26,7 +26,7 @@
   <h1>AI Transcriptor</h1>
   <p class="lead">Upload your file and let AI turn it into text effortlessly and instantly.</p>
 
-  <form method="POST" action="{{ url_for('transcribe.transcribe') }}" enctype="multipart/form-data">
+  <form id="transcribe-form" method="POST" action="{{ url_for('transcribe.transcribe') }}" enctype="multipart/form-data">
     <div class="mb-3">
       <label for="file" class="form-label">Select your audio or video file</label>
       <input type="file" name="file" id="file" class="form-control" required>
@@ -47,15 +47,9 @@
     </div>
     <button type="submit" class="btn btn-primary w-100 py-2">Transcribe It</button>
   </form>
+  <div id="transcript-result" class="mt-4"></div>
+</div>
 
-  {% if transcript %}
-  <h4 class="mb-3">Transcript Preview</h4>
-  <pre>{{ transcript }}</pre>
-  <div class="d-flex gap-3 mt-3">
-    <a href="{{ url_for('static', filename='output/' ~ download_txt) }}" class="btn btn-primary">Download .txt</a>
-    <a href="{{ url_for('static', filename='output/' ~ download_srt) }}" class="btn btn-secondary">Download .srt</a>
-  </div>
-{% endif %}
 
 
 </div>
@@ -67,6 +61,7 @@
     &copy; 2025 Ivan Cicvaric · <a href="#">Privacy</a> · <a href="#">Terms</a>
   </footer>
 
-
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  
 </body>
 </html>
